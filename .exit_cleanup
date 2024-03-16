@@ -1,0 +1,17 @@
+#!/bin/bash
+
+IFS=$'\n'
+set -f
+if [ -z "$(ufw status | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')" ]; then
+   exit 0
+fi
+printf "You have some IP(s) left in ufw rules\nDo you want me to remove them? [Y,n]"
+read answ
+case $answ in
+	[yY]* ) ;;
+	[nN]* ) exit 0 ;;
+	* ) echo "Invalid input. Defaulting to yes." ;;
+esac
+for i in $(ufw status | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'); do
+   ufw delete allow from $i
+done
