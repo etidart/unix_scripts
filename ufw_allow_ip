@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ -z $1 ]; then
+	ufw allow from $(echo $SSH_CLIENT | awk '{print $1}')
+	exit
+fi
+ufw allow from $1
